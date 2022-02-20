@@ -29,7 +29,6 @@ class Solution {
         int subsequences[][] = new int[3][n + 1];
         int M = 1000000007;
         for (int stringPos = 1; stringPos <= n; stringPos++) {
-            ;
             char ch = str.charAt(stringPos - 1);
             if (ch == 'a') {
                 subsequences[0][stringPos] = ((2 * subsequences[0][stringPos - 1]) % M + 1) % M;
