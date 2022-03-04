@@ -7,6 +7,18 @@ public class Main {
         return ch == '*' || ch == '/' ? 1 : 0;
     }
 
+    public static void calc(Stack<Character> opt, Stack<String> pre, Stack<String> post) {
+        char operator = opt.pop();
+
+        String prefix2 = pre.pop();
+        String prefix1 = pre.pop();
+        pre.push(operator + prefix1 + prefix2);
+
+        String postfix2 = post.pop();
+        String postfix1 = post.pop();
+        post.push(postfix1 + postfix2 + operator);
+    }
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String exp = br.readLine();
@@ -21,29 +33,13 @@ public class Main {
                 opt.push(ch);
             } else if (ch == ')') {
                 while (opt.size() > 0 && opt.peek() != '(') {
-                    char operator = opt.pop();
-
-                    String prefix2 = pre.pop();
-                    String prefix1 = pre.pop();
-                    pre.push(operator + prefix1 + prefix2);
-
-                    String postfix2 = post.pop();
-                    String postfix1 = post.pop();
-                    post.push(postfix1 + postfix2 + operator);
+                    calc(opt, pre, post);
                 }
                 opt.pop();
 
             } else if (ch == '*' || ch == '/' || ch == '-' || ch == '+') {
                 while (opt.size() > 0 && opt.peek() != '(' && precedence(ch) <= precedence(opt.peek())) {
-                    char operator = opt.pop();
-
-                    String prefix2 = pre.pop();
-                    String prefix1 = pre.pop();
-                    pre.push(operator + prefix1 + prefix2);
-
-                    String postfix2 = post.pop();
-                    String postfix1 = post.pop();
-                    post.push(postfix1 + postfix2 + operator);
+                    calc(opt, pre, post);
                 }
                 opt.push(ch);
 
@@ -54,15 +50,7 @@ public class Main {
         }
 
         while (opt.size() > 0) {
-            char operator = opt.pop();
-
-            String prefix2 = pre.pop();
-            String prefix1 = pre.pop();
-            pre.push(operator + prefix1 + prefix2);
-
-            String postfix2 = post.pop();
-            String postfix1 = post.pop();
-            post.push(postfix1 + postfix2 + operator);
+            calc(opt, pre, post);
         }
 
         System.out.println(post.pop());
